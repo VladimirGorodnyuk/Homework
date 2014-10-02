@@ -60,7 +60,10 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lPar
 	case WM_KEYDOWN:
 		wsprintf(str1, TEXT("%c"), (WCHAR)wParam);
 		if ((int)wParam == 8)
-			str[_tcslen(str) - 1] = 0;
+		{
+			if (_tcslen(str) != 0)
+				str[_tcslen(str) - 1] = 0;
+		}
 		else
 			_tcscat_s(str, str1);
 		SetWindowText(hWnd, str);
