@@ -2,8 +2,6 @@
 #include <tchar.h>
 #include <time.h>
 
-LRESULT CALLBACK WindowProc(HWND, UINT, WPARAM, LPARAM);
-
 TCHAR szClassWindow[] = TEXT("Timer");
 
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpszCmdLine, int nCmdShow)
@@ -34,6 +32,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpszCmdLine, int 
 		TranslateMessage(&lpMsg);
 		DispatchMessage(&lpMsg);
 	}
+	
 	return lpMsg.wParam;
 }
 int sec = 0;
@@ -69,14 +68,12 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		break;
-	case WM_KEYDOWN:
-		if (wParam == VK_RETURN)
-			SetTimer(hWnd, 1, 1000, TimerProc);
-		else if (wParam == VK_ESCAPE)
-			KillTimer(hWnd, 1);
+	case WM_CREATE:
+		SetTimer(hWnd, 1, 1000, TimerProc);
 		break;
 	default:
 		return DefWindowProc(hWnd, message, wParam, lParam);
 	}
 	return 0;
 }
+
