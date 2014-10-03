@@ -45,14 +45,17 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		break;
+	case WM_TIMER:
+		count = 0;
+		break;
 	case WM_LBUTTONDOWN:
 		count++;
-		SetTimer(hWnd, 1, 200, NULL);
+		SetTimer(hWnd, 1, 500, NULL);
 		if (count == 3)
 		{
 			MessageBox(NULL, TEXT("Тройной клик"), TEXT("Тройной клик"), MB_OK | MB_ICONINFORMATION);
 			KillTimer(hWnd, 1);
-			count = 0;
+			
 		}
 		break;
 	default:
