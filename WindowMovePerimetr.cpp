@@ -36,29 +36,35 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpszCmdLine, int 
 	}
 	return lpMsg.wParam;
 }
-
+int shagY = 0, shagX = 10;
 VOID CALLBACK TimerProc(HWND hWnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime)
 {
 	RECT r;
 	GetWindowRect(hWnd, &r);
 	int x1 = r.left, y1 = r.top, width = r.right - r.left, height = r.bottom - r.top;
-	time_t t;
-	TCHAR str[100];
-	t = time(NULL);
-	lstrcpy(str, _tctime(&t));
-	str[lstrlen(str) - 1] = '\0';
-	SetWindowText(hWnd, str);
-	int shag = 1;
-	if ((x1<(GetSystemMetrics(SM_CXSCREEN) - width)) && x1!=0&&(y1 != (GetSystemMetrics(SM_CYSCREEN) - height)))
-		MoveWindow(hWnd, (x1 + shag), y1, width, height, true);
-	else if ((x1 == (GetSystemMetrics(SM_CXSCREEN) - width)) && (y1 != (GetSystemMetrics(SM_CYSCREEN) - height)))
-		MoveWindow(hWnd, x1, y1 + shag, width, height, true);
-	else if (y1 == GetSystemMetrics(SM_CYSCREEN) - height&&x1!=0)
-	MoveWindow(hWnd, x1 - shag, y1, width, height, true);
-	else if (x1 == 0&&y1!=0)
-	MoveWindow(hWnd, x1, y1 - shag, width, height, true);
-	else if (x1<GetSystemMetrics(SM_CXSCREEN) - width&&x1 >= 0 && (y1 != GetSystemMetrics(SM_CYSCREEN) - height || y1 == 0))
-	MoveWindow(hWnd, (x1 + shag), y1, width, height, true);
+	int R = (GetSystemMetrics(SM_CXSCREEN) - width);//правый край
+	int D = (GetSystemMetrics(SM_CYSCREEN) - height);//низ
+	if (x1 >= R)
+	{
+		shagX = 0;
+		shagY = 10;
+	}
+	if (y1 >= D)
+	{
+		shagX = -10;
+		shagY = 0;
+	}
+	if (x1 <= 0)
+	{
+		shagX = 0;
+		shagY = -10;
+	}
+	if (y1 <= 0 && x1 < R)
+	{
+		shagX = 10;
+		shagY = 0;
+	}
+	MoveWindow(hWnd, x1 + shagX, y1 + shagY, width, height, true);
 }
 
 LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
